@@ -45,3 +45,17 @@ export const udpateCandidate = async (req , res) => {
         res.status(400).json({error : error.message})
     }
 }
+
+export const deleteCandidate = async (req , res) => {
+    try {
+        const {id} = req.params.id
+        const candidate = Candidate.findByIdAndDelete(id)
+        if(!candidate) {
+            return res.status(404).json({ error: 'Candidate not found' });
+        }
+
+        res.status(200).json(candidate)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
