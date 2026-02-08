@@ -11,8 +11,21 @@ const candidateSchema = new mongoose.Schema({
         default : 'Pending'
     
     },
-    resumeUrl : {type : String }
+    resume : {
+        data : Buffer,
+        contentType : String
+    }
 
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 })
+
+candidateSchema.virtual('resumeUrl').get(function () {
+    if (this.resume && (this.resume.data || this.resume.contentType)) {
+        return `candidates/${this._id}/resume`;
+    }
+    return null;
+});
 
 export default mongoose.model('Candidate' , candidateSchema)
